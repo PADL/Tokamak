@@ -40,7 +40,7 @@ struct ShapeStyleDemo: View {
         .foregroundStyle(Color.blue)
       }
       ZStack {
-        HStack(spacing: 0) {
+        HStack(padding: 0) {
           Rectangle()
             .foregroundStyle(Color.red)
             .frame(width: 60, height: 100)
@@ -60,7 +60,7 @@ struct ShapeStyleDemo: View {
             .foregroundStyle(Color.purple)
             .frame(width: 60, height: 100)
         }
-        VStack(spacing: 0) {
+        VStack(padding: 0) {
           HStack {
             Text("Ultra Thin")
             Spacer()

@@ -67,7 +67,7 @@ final class VisualRenderingTests: XCTestCase {
 
   func testForegroundStyle() {
     assertSnapshot(
-      matching: HStack(spacing: 0) {
+      matching: HStack(padding: 0) {
         Rectangle()
           .frame(width: 50, height: 50)
           .foregroundStyle(Color.red)
@@ -133,7 +133,7 @@ final class VisualRenderingTests: XCTestCase {
   func testMaterial() {
     assertSnapshot(
       matching: ZStack {
-        HStack(spacing: 0) {
+        HStack(padding: 0) {
           Color.red
           Color.orange
           Color.yellow
@@ -141,7 +141,7 @@ final class VisualRenderingTests: XCTestCase {
           Color.blue
           Color.purple
         }
-        VStack(spacing: 0) {
+        VStack(padding: 0) {
           Color.clear
             .background(Material.ultraThin)
           Color.clear

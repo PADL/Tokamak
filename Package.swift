@@ -12,16 +12,16 @@ let package = Package(
     // Products define the executables and libraries produced by a package,
     // and make them visible to other packages.
     .library(
-      name: "TokamakGTK",
-      targets: ["TokamakGTK"]
-    ),
-    .executable(
-      name: "TokamakGTKDemo",
-      targets: ["TokamakGTKDemo"]
+      name: "TokamakLVGL",
+      targets: ["TokamakLVGL"]
     ),
     .library(
       name: "TokamakShim",
       targets: ["TokamakShim"]
+    ),
+    .executable(
+      name: "TokamakLVGLDemo",
+      targets: ["TokamakLVGLDemo"]
     ),
   ],
   dependencies: [
@@ -45,6 +45,10 @@ let package = Package(
       url: "https://github.com/pointfreeco/swift-snapshot-testing.git",
       from: "1.9.0"
     ),
+    .package(
+      url: "https://github.com/PADL/LVGLSwift.git",
+      branch: "main"
+    ),
   ],
   targets: [
     // Targets are the basic building blocks of a package. A target can define
@@ -63,46 +67,22 @@ let package = Package(
     .target(
       name: "TokamakShim",
       dependencies: [
-        .target(name: "TokamakGTK", condition: .when(platforms: [.linux])),
-      ]
-    ),
-    .systemLibrary(
-      name: "CGTK",
-      pkgConfig: "gtk+-3.0",
-      providers: [
-        .apt(["libgtk+-3.0", "gtk+-3.0"]),
-        // .yum(["gtk3-devel"]),
-        .brew(["gtk+3"]),
-      ]
-    ),
-    .systemLibrary(
-      name: "CGDK",
-      pkgConfig: "gdk-3.0",
-      providers: [
-        .apt(["libgtk+-3.0", "gtk+-3.0"]),
-        // .yum(["gtk3-devel"]),
-        .brew(["gtk+3"]),
+        .target(name: "TokamakLVGL", condition: .when(platforms: [.linux])),
       ]
     ),
     .target(
-      name: "TokamakGTKCHelpers",
-      dependencies: ["CGTK"]
-    ),
-    .target(
-      name: "TokamakGTK",
+      name: "TokamakLVGL",
       dependencies: [
-        "TokamakCore", "CGTK", "CGDK", "TokamakGTKCHelpers",
+        "TokamakCore",
+        .product(
+          name: "LVGL",
+          package: "LVGLSwift"
+        ),
         .product(
           name: "OpenCombineShim",
           package: "OpenCombine"
         ),
-      ],
-      cSettings: [.unsafeFlags(["-I/usr/include/gtk-3.0"])]
-    ),
-    .executableTarget(
-      name: "TokamakGTKDemo",
-      dependencies: ["TokamakGTK"],
-      resources: [.copy("logo-header.png")]
+      ]
     ),
     .executableTarget(
       name: "TokamakCoreBenchmark",
@@ -117,17 +97,6 @@ let package = Package(
       dependencies: ["TokamakCore"]
     ),
     .testTarget(
-      name: "TokamakLayoutTests",
-      dependencies: [
-        "TokamakCore",
-        .product(
-          name: "SnapshotTesting",
-          package: "swift-snapshot-testing",
-          condition: .when(platforms: [.macOS])
-        ),
-      ]
-    ),
-    .testTarget(
       name: "TokamakReconcilerTests",
       dependencies: [
         "TokamakCore",
@@ -137,6 +106,11 @@ let package = Package(
     .testTarget(
       name: "TokamakTests",
       dependencies: ["TokamakTestRenderer"]
+    ),
+    .executableTarget(
+      name: "TokamakLVGLDemo",
+      dependencies: ["TokamakLVGL"],
+      resources: [.copy("logo-header.png")]
     ),
   ]
 )

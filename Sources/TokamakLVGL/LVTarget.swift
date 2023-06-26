@@ -1,4 +1,4 @@
-// Copyright 2020 Tokamak contributors
+// Copyright 2023 Tokamak contributors
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -12,13 +12,30 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#if canImport(LVGL)
-// FIXME: for testing only
-@_exported import TokamakLVGL
-#elseif canImport(SwiftUI)
-@_exported import SwiftUI
-#elseif os(WASI)
-@_exported import TokamakDOM
-#elseif os(Linux)
-@_exported import TokamakGTK
-#endif
+import LVGL
+import TokamakCore
+
+final class LVTarget: Target, CustomStringConvertible {
+  var object: LVObject!
+  var view: AnyView
+
+  init<V: View>(_ view: V, _ object: LVObject) {
+    self.object = object
+    self.view = AnyView(view)
+  }
+
+  init(object: LVObject) {
+    self.object = object
+    view = AnyView(EmptyView())
+  }
+
+  var description: String {
+    "LVTarget(object: \(object!))"
+  }
+}
+
+extension LVObject {
+  var isContainer: Bool {
+    childCount != 0
+  }
+}

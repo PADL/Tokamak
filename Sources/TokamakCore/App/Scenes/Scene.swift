@@ -56,5 +56,5 @@ extension Never: Scene {}
 
 /// Calls `fatalError` with an explanation that a given `type` is a primitive `Scene`
 public func neverScene(_ type: String) -> Never {
-  fatalError("\(type) is a primitive `Scene`, you're not supposed to access its `body`.")
+    fatalError("\(type) is a primitive `Scene`, you're not supposed to access its `body`.")
 }

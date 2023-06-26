@@ -51,12 +51,12 @@ final class StackTests: XCTestCase {
 
   func testVStackSpacing() async {
     await compare(size: .init(width: 500, height: 500)) {
-      SwiftUI.VStack(spacing: 0) {
+      SwiftUI.VStack(padding: 0) {
         SwiftUI.Rectangle().fill(SwiftUI.Color(white: 0))
         SwiftUI.Rectangle().fill(SwiftUI.Color(white: 127 / 255))
       }
     } to: {
-      TokamakStaticHTML.VStack(spacing: 0) {
+      TokamakStaticHTML.VStack(padding: 0) {
         TokamakStaticHTML.Rectangle().fill(TokamakStaticHTML.Color(white: 0))
         TokamakStaticHTML.Rectangle().fill(TokamakStaticHTML.Color(white: 127 / 255))
       }
@@ -65,12 +65,12 @@ final class StackTests: XCTestCase {
 
   func testHStackSpacing() async {
     await compare(size: .init(width: 500, height: 500)) {
-      SwiftUI.HStack(spacing: 0) {
+      SwiftUI.HStack(padding: 0) {
         SwiftUI.Rectangle().fill(SwiftUI.Color(white: 0))
         SwiftUI.Rectangle().fill(SwiftUI.Color(white: 127 / 255))
       }
     } to: {
-      TokamakStaticHTML.HStack(spacing: 0) {
+      TokamakStaticHTML.HStack(padding: 0) {
         TokamakStaticHTML.Rectangle().fill(TokamakStaticHTML.Color(white: 0))
         TokamakStaticHTML.Rectangle().fill(TokamakStaticHTML.Color(white: 127 / 255))
       }

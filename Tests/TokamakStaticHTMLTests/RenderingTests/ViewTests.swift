@@ -24,7 +24,7 @@ import XCTest
 final class ViewRenderingTests: XCTestCase {
   func testProgressView() {
     assertSnapshot(
-      matching: VStack(spacing: 0) {
+      matching: VStack(padding: 0) {
         ProgressView(value: 0.5) {
           Text("Loading")
         } currentValueLabel: {

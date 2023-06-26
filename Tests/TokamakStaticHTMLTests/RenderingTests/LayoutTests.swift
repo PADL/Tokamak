@@ -139,11 +139,11 @@ final class LayoutRenderingTests: XCTestCase {
 
   func testStacks() {
     struct Stacks: View {
-      let spacing: CGFloat
+      let padding: CGFloat
 
       var body: some View {
-        VStack(spacing: spacing) {
-          HStack(spacing: spacing) {
+        VStack(padding: padding) {
+          HStack(padding: padding) {
             Rectangle()
               .fill(Color.red)
               .frame(width: 100, height: 100)
@@ -153,7 +153,7 @@ final class LayoutRenderingTests: XCTestCase {
               .frame(width: 100, height: 100)
           }
 
-          HStack(spacing: spacing) {
+          HStack(padding: padding) {
             Rectangle()
               .fill(Color.blue)
               .frame(width: 100, height: 100)
@@ -167,13 +167,13 @@ final class LayoutRenderingTests: XCTestCase {
     }
 
     assertSnapshot(
-      matching: Stacks(spacing: 10),
+      matching: Stacks(padding: 10),
       as: .image(size: .init(width: 210, height: 210)),
       timeout: defaultSnapshotTimeout
     )
 
     assertSnapshot(
-      matching: Stacks(spacing: 20),
+      matching: Stacks(padding: 20),
       as: .image(size: .init(width: 220, height: 220)),
       timeout: defaultSnapshotTimeout
     )
