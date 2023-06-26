@@ -11,22 +11,6 @@ let package = Package(
   products: [
     // Products define the executables and libraries produced by a package,
     // and make them visible to other packages.
-    .executable(
-      name: "TokamakDemo",
-      targets: ["TokamakDemo"]
-    ),
-    .library(
-      name: "TokamakDOM",
-      targets: ["TokamakDOM"]
-    ),
-    .library(
-      name: "TokamakStaticHTML",
-      targets: ["TokamakStaticHTML"]
-    ),
-    .executable(
-      name: "TokamakStaticHTMLDemo",
-      targets: ["TokamakStaticHTMLDemo"]
-    ),
     .library(
       name: "TokamakGTK",
       targets: ["TokamakGTK"]
@@ -38,10 +22,6 @@ let package = Package(
     .library(
       name: "TokamakShim",
       targets: ["TokamakShim"]
-    ),
-    .executable(
-      name: "TokamakStaticHTMLBenchmark",
-      targets: ["TokamakStaticHTMLBenchmark"]
     ),
   ],
   dependencies: [
@@ -83,7 +63,6 @@ let package = Package(
     .target(
       name: "TokamakShim",
       dependencies: [
-        .target(name: "TokamakDOM", condition: .when(platforms: [.wasi])),
         .target(name: "TokamakGTK", condition: .when(platforms: [.linux])),
       ]
     ),
@@ -117,18 +96,13 @@ let package = Package(
           name: "OpenCombineShim",
           package: "OpenCombine"
         ),
-      ]
+      ],
+      cSettings: [.unsafeFlags(["-I/usr/include/gtk-3.0"])]
     ),
     .executableTarget(
       name: "TokamakGTKDemo",
       dependencies: ["TokamakGTK"],
       resources: [.copy("logo-header.png")]
-    ),
-    .target(
-      name: "TokamakStaticHTML",
-      dependencies: [
-        "TokamakCore",
-      ]
     ),
     .executableTarget(
       name: "TokamakCoreBenchmark",
@@ -136,59 +110,6 @@ let package = Package(
         .product(name: "Benchmark", package: "swift-benchmark"),
         "TokamakCore",
         "TokamakTestRenderer",
-      ]
-    ),
-    .executableTarget(
-      name: "TokamakStaticHTMLBenchmark",
-      dependencies: [
-        .product(name: "Benchmark", package: "swift-benchmark"),
-        "TokamakStaticHTML",
-      ]
-    ),
-    .target(
-      name: "TokamakDOM",
-      dependencies: [
-        "TokamakCore",
-        "TokamakStaticHTML",
-        .product(
-          name: "OpenCombineShim",
-          package: "OpenCombine"
-        ),
-        .product(
-          name: "JavaScriptKit",
-          package: "JavaScriptKit",
-          condition: .when(platforms: [.wasi])
-        ),
-        .product(
-          name: "JavaScriptEventLoop",
-          package: "JavaScriptKit",
-          condition: .when(platforms: [.wasi])
-        ),
-        "OpenCombineJS",
-      ]
-    ),
-    .executableTarget(
-      name: "TokamakDemo",
-      dependencies: [
-        "TokamakShim",
-        .product(
-          name: "JavaScriptKit",
-          package: "JavaScriptKit",
-          condition: .when(platforms: [.wasi])
-        ),
-      ],
-      resources: [.copy("logo-header.png")],
-      linkerSettings: [
-        .unsafeFlags(
-          ["-Xlinker", "--stack-first", "-Xlinker", "-z", "-Xlinker", "stack-size=16777216"],
-          .when(platforms: [.wasi])
-        ),
-      ]
-    ),
-    .executableTarget(
-      name: "TokamakStaticHTMLDemo",
-      dependencies: [
-        "TokamakStaticHTML",
       ]
     ),
     .target(
@@ -199,7 +120,6 @@ let package = Package(
       name: "TokamakLayoutTests",
       dependencies: [
         "TokamakCore",
-        "TokamakStaticHTML",
         .product(
           name: "SnapshotTesting",
           package: "swift-snapshot-testing",
@@ -217,18 +137,6 @@ let package = Package(
     .testTarget(
       name: "TokamakTests",
       dependencies: ["TokamakTestRenderer"]
-    ),
-    .testTarget(
-      name: "TokamakStaticHTMLTests",
-      dependencies: [
-        "TokamakStaticHTML",
-        .product(
-          name: "SnapshotTesting",
-          package: "swift-snapshot-testing",
-          condition: .when(platforms: [.macOS])
-        ),
-      ],
-      exclude: ["__Snapshots__", "RenderingTests/__Snapshots__"]
     ),
   ]
 )
