@@ -58,3 +58,15 @@ extension Toggle: ParentView {
     (label as? GroupView)?.children ?? [AnyView(label)]
   }
 }
+
+
+/// This is a helper type that works around absence of "package private" access control in Swift
+public struct _ToggleProxy<Label> where Label: View{
+  public let subject: Toggle<Label>
+
+  public init(_ subject: Toggle<Label>) { self.subject = subject }
+
+  public var isOn: Binding<Bool> { subject.$isOn }
+  public var label: Label { subject.label }
+}
+

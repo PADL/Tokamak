@@ -18,7 +18,12 @@ import LVGL
 import TokamakCore
 
 class LVStackContainer: LVContainer {
-  convenience init(flow: lv_flex_flow_t, padding: Int16, alignment: Alignment, with parent: LVObject!) {
+  convenience init(
+    flow: lv_flex_flow_t,
+    padding: Int16,
+    alignment: Alignment,
+    with parent: LVObject!
+  ) {
     self.init(with: parent)
 
     withLocalStyle { style in
@@ -41,7 +46,7 @@ class LVStackContainer: LVContainer {
     set(flag: .layout1) // LV_OBJ_FLAG_FLEX_IN_NEW_TRACK
     align(to: alignment.lv_alignment)
   }
-  
+
   required init(with parent: LVObject!) {
     super.init(with: parent)
   }
