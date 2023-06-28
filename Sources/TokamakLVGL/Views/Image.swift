@@ -21,7 +21,10 @@ import TokamakCore
 
 extension Image: AnyLVObject {
   func build(with parent: LVObject) -> LVObject {
-    LVImage(with: parent)
+    let proxy = _ImageProxy(self)
+    let image = LVImage(with: parent)
+    image.source = .file(imagePath(for: proxy))
+    return image
   }
 
   func update(target: LVTarget) {
