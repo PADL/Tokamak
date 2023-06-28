@@ -24,6 +24,8 @@ extension LVButton {
       switch event.code {
       case LV_EVENT_PRESSED:
         action()
+      case LV_EVENT_CLICKED:
+        fallthrough
       default:
         break
       }

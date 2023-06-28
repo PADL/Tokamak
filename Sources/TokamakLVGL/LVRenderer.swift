@@ -17,8 +17,11 @@ import Dispatch
 import LVGL
 @_spi(TokamakCore) import TokamakCore
 
+// marker protocol for content sizing
+protocol LVContentSizeable {}
+
 // container expands to fill parent size, is this correct?
-class LVContainer: LVObject {
+class LVContainer: LVObject, LVContentSizeable {
   required init(with parent: LVObject!) {
     super.init(with: parent)
     size = parent.size
@@ -109,7 +112,8 @@ final class LVRenderer: Renderer {
     }
 
     let object = anyObject.build(with: parent.object)
-    debugPrint("LVGL renderer updating \(object)")
+    debugPrint("LVGL renderer mounting \(object)")
+    object.debugViewTree()
 
     if let stack = mapAnyView(parent.view, transform: { (view: StackProtocol) in view }) {
       object.align(to: stack.alignment.lv_alignment)
@@ -175,7 +179,7 @@ protocol LVPrimitive {
 extension LVObject {
   func update() {
     // FIXME: is this correct
-    if self is LVContainer {
+    if self is any LVContentSizeable {
       self.size = .content
     }
     updateLayout()

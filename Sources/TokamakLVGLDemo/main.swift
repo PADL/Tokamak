@@ -53,17 +53,12 @@ struct TokamakLVGLDemo: App {
   var body: some Scene {
     WindowGroup("Test Scene") {
       List {
-        ForEach(1..<4) {
-          Text("Item #\($0)")
-        }
-        /*
          Image("logo-header.png", bundle: Bundle.module, label: Text("Tokamak Demo"))
          Counter()
          PickerDemo()
          ForEach(1..<10) {
-         Text("Item #\($0)")
+           Text("Item #\($0)")
          }
-         */
       }
     }
   }

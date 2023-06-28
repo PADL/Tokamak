@@ -19,6 +19,7 @@ import TokamakCore
 
 extension LVTextArea {
   private func bind(textBinding: Binding<String>) {
+    text = textBinding.wrappedValue
     onEvent = { event in
       switch event.code {
       case LV_EVENT_VALUE_CHANGED:
@@ -36,7 +37,6 @@ extension LVTextArea {
     secure: Bool = false
   ) -> Self {
     let textArea = Self(with: parent)
-    textArea.text = textBinding.wrappedValue
     textArea.placeholderText = label.rawText
     textArea.passwordMode = secure
     textArea.bind(textBinding: textBinding)
@@ -47,9 +47,8 @@ extension LVTextArea {
     textBinding: Binding<String>,
     label: _TextProxy
   ) {
-    text = textBinding.wrappedValue
     placeholderText = label.rawText
-    bind(textBinding: textBinding) // TODO: GTK backend doesn't do this
+    bind(textBinding: textBinding)
   }
 }
 
@@ -66,7 +65,10 @@ extension SecureField: LVPrimitive where Label == Text {
       )
     }, update: { target in
       let textArea = target.object as! LVTextArea
-      textArea.update(textBinding: proxy.textBinding, label: proxy.label)
+      textArea.update(
+        textBinding: proxy.textBinding,
+        label: proxy.label
+      )
     }) {})
   }
 }
@@ -76,10 +78,17 @@ extension TextField: LVPrimitive where Label == Text {
   public var renderedBody: AnyView {
     let proxy = _TextFieldProxy(self)
     return AnyView(LVObjectView(build: { parent in
-      LVTextArea.build(with: parent, textBinding: proxy.textBinding, label: _TextProxy(proxy.label))
+      LVTextArea.build(
+        with: parent,
+        textBinding: proxy.textBinding,
+        label: _TextProxy(proxy.label)
+      )
     }, update: { target in
       let textArea = target.object as! LVTextArea
-      textArea.update(textBinding: proxy.textBinding, label: _TextProxy(proxy.label))
+      textArea.update(
+        textBinding: proxy.textBinding,
+        label: _TextProxy(proxy.label)
+      )
     }) {})
   }
 }

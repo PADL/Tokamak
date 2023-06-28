@@ -151,3 +151,15 @@ public extension Button where Label == Text {
     self.role = role
   }
 }
+
+/// This is a helper type that works around absence of "package private" access control in Swift
+public struct _ButtonProxy<Label> where Label: View {
+  public let subject: _Button<Label>
+
+  public init(_ subject: _Button<Label>) { self.subject = subject }
+
+  public var label: Label { subject.label }
+  public var role: ButtonRole? { subject.role }
+  public var action: () -> () { subject.action }
+  public var isPressed: Binding<Bool> { subject.$isPressed }
+}
