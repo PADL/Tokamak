@@ -55,9 +55,9 @@ struct TokamakLVGLDemo: App {
       List {
          Image("logo-header.png", bundle: Bundle.module, label: Text("Tokamak Demo"))
          Counter()
-         PickerDemo()
-         ForEach(1..<10) {
-           Text("Item #\($0)")
+        //PickerDemo()
+        ForEach(0..<10) {
+           Text("Item #\($0 + 1)")
          }
       }
     }

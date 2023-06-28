@@ -28,7 +28,7 @@ class LVContainer: LVObject, LVContentSizeable {
   }
 }
 
-class LVApplication: LVObject {}
+class LVApplication: LVObject, LVContentSizeable {}
 
 extension EnvironmentValues {
   static var defaultEnvironment: Self {
