@@ -18,15 +18,18 @@
 import LVGL
 import TokamakCore
 
-class LVScrollViewContainer: LVContainer {}
+class LVScrollViewContainer: LVContainer {
+  required init(with parent: LVObject!) {
+    super.init(with: parent)
+    set(flag: .scrollable)
+  }
+}
 
 extension ScrollView: LVPrimitive {
   @_spi(TokamakCore)
   public var renderedBody: AnyView {
     AnyView(LVObjectView(build: { parent in
-      let object = LVScrollViewContainer(with: parent)
-      object.set(flag: .scrollable)
-      return object
+      LVScrollViewContainer(with: parent)
     }) {
       if children.count > 1 {
         VStack {

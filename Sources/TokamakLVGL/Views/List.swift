@@ -16,7 +16,15 @@ import CLVGL
 import LVGL
 import TokamakCore
 
-class LVListContainer: LVContainer {}
+class LVListContainer: LVContainer {
+  required init(with parent: LVObject!) {
+    super.init(with: parent)
+    withLocalStyle { style in
+      style.flexFlow = LV_FLEX_FLOW_COLUMN.rawValue
+    }
+    set(layout: LV_LAYOUT_FLEX)
+  }
+}
 
 extension List: LVPrimitive {
   @ViewBuilder
@@ -39,12 +47,7 @@ extension List: LVPrimitive {
     let proxy = _ListProxy(self)
     return AnyView(ScrollView {
       LVObjectView(build: { object in
-        let container = LVListContainer(with: object)
-        container.withLocalStyle { style in
-          style.flexFlow = LV_FLEX_FLOW_COLUMN.rawValue
-        }
-        container.set(layout: LV_LAYOUT_FLEX)
-        return container
+        LVListContainer(with: object)
       }) {
         if let content = proxy.content as? ParentView {
           iterateAsRow(content.children)
@@ -103,12 +106,7 @@ extension PlainListStyle: ListStyleDeferredToRenderer {
   public func listBody<ListBody>(_ content: ListBody) -> AnyView where ListBody: View {
     AnyView(
       LVObjectView(build: { object in
-        let container = LVListContainer(with: object)
-        container.withLocalStyle { style in
-          style.flexFlow = LV_FLEX_FLOW_COLUMN.rawValue
-        }
-        container.set(layout: LV_LAYOUT_FLEX)
-        return container
+        LVListContainer(with: object)
       }) {
         content
       }

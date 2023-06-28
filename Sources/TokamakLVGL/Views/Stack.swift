@@ -17,7 +17,35 @@ import Foundation
 import LVGL
 import TokamakCore
 
-class LVStackContainer: LVContainer {}
+class LVStackContainer: LVContainer {
+  convenience init(flow: lv_flex_flow_t, padding: Int16, alignment: Alignment, with parent: LVObject!) {
+    self.init(with: parent)
+
+    withLocalStyle { style in
+      style.flexMainPlace = LV_FLEX_ALIGN_SPACE_EVENLY.rawValue
+      style.flexCrossPlace = LV_FLEX_ALIGN_SPACE_EVENLY.rawValue
+      style.flexTrackPlace = LV_FLEX_ALIGN_SPACE_AROUND.rawValue
+      style.flexFlow = flow.rawValue
+      style.flexGrow = 1
+      switch flow {
+      case LV_FLEX_FLOW_ROW:
+        style.rowPadding = padding
+      case LV_FLEX_FLOW_COLUMN:
+        style.columnPadding = padding
+      default:
+        break
+      }
+    }
+
+    set(layout: LV_LAYOUT_FLEX)
+    set(flag: .layout1) // LV_OBJ_FLAG_FLEX_IN_NEW_TRACK
+    align(to: alignment.lv_alignment)
+  }
+  
+  required init(with parent: LVObject!) {
+    super.init(with: parent)
+  }
+}
 
 protocol StackProtocol {
   var alignment: Alignment { get }
@@ -30,26 +58,7 @@ struct Box<Content: View>: View, ParentView, AnyLVObject, StackProtocol {
   let alignment: Alignment
 
   func build(with parent: LVObject) -> LVObject {
-    let object = LVStackContainer(with: parent)
-
-    object.withLocalStyle { style in
-      style.flexMainPlace = LV_FLEX_ALIGN_SPACE_EVENLY.rawValue
-      style.flexCrossPlace = LV_FLEX_ALIGN_SPACE_EVENLY.rawValue
-      style.flexTrackPlace = LV_FLEX_ALIGN_SPACE_AROUND.rawValue
-      style.flexFlow = flow.rawValue
-      style.flexGrow = 1
-      if flow == LV_FLEX_FLOW_ROW {
-        style.rowPadding = padding
-      } else if flow == LV_FLEX_FLOW_COLUMN {
-        style.columnPadding = padding
-      }
-    }
-
-    object.set(layout: LV_LAYOUT_FLEX)
-    object.set(flag: .layout1) // LV_OBJ_FLAG_FLEX_IN_NEW_TRACK
-    object.align(to: alignment.lv_alignment)
-
-    return object
+    LVStackContainer(flow: flow, padding: padding, alignment: alignment, with: parent)
   }
 
   func update(target: LVTarget) {}
